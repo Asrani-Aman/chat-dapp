@@ -1,4 +1,36 @@
 
+
+.text{
+   display: flex;
+   justify-content: center;
+   /* border:2px solid white; */
+   background-color: #1f232e;
+   padding: 8px;
+   padding-block: 10px;
+   border-radius:25px ;
+   color: #F18303;
+   width: 80vw;
+   margin: auto;
+   margin-top: 20px;
+   margin-bottom: 20px;
+
+}
+
+.button{
+    padding:13px;
+    border-radius: 20px;
+    border:none;
+    background: #1f232e;
+    color:#F18303;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.Button{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
 .NavBar{
     width: 80%;
     margin:  3rem auto;

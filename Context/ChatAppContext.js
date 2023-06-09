@@ -8,6 +8,9 @@ import {
   connectingWithContract,
 } from "../Utils/apiFeature";
 
+
+
+
 export const ChatAppContect = React.createContext();
 
 export const ChatAppProvider = ({ children }) => {
@@ -19,6 +22,8 @@ export const ChatAppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [error, setError] = useState("");
+
+  const [emergency, setEmergency] = useState("");
 
   //CHAT USER DATA
   const [currentUserName, setCurrentUserName] = useState("");
@@ -33,6 +38,7 @@ export const ChatAppProvider = ({ children }) => {
       const contract = await connectingWithContract();
       //GET ACCOUNT
       const connectAccount = await connectWallet();
+
       setAccount(connectAccount);
       //GET USER NAME
       const userName = await contract.getUsername(connectAccount);
@@ -50,8 +56,51 @@ export const ChatAppProvider = ({ children }) => {
   };
   useEffect(() => {
     fetchData();
+
   }, []);
 
+
+
+  // fetch Emergency Data
+
+  const FetchEmergencyData = async () => {
+    try {
+      const contract = await connectingWithContract();
+      await contract.getData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Read Data
+
+  const ShowEmergencyData = async () => {
+    try {
+      const contract = await connectingWithContract();
+
+      const emergency = await contract.showData();
+      setEmergency(emergency);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Response
+
+  const EmergencyResponse = async () => {
+    try {
+      const contract = await connectingWithContract();
+
+      const emergency = await contract.showData();
+      await contract.emergencyResponse();
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+
+  // console.log(emergency);
   //READ MESSAGE
   const readMessage = async (friendAddress) => {
     try {
@@ -64,24 +113,35 @@ export const ChatAppProvider = ({ children }) => {
   };
 
   //CREATE ACCOUNT
-  const createAccount = async ({ name }) => {
-    console.log(name, account);
-    try {
-      if (!name || !account)
-        return setError("Name And Account Address, cannot be empty");
+  // const createAccount = async ({ name }) => {
+  //   console.log(name, account);
+  //   try {
+  //     if (!name || !account)
+  //       return setError("Name And Account Address, cannot be empty");
 
+  //     const contract = await connectingWithContract();
+  //     console.log(contract);
+  //     const getCreatedUser = await contract.createAccount(name);
+
+  //     setLoading(true);
+  //     await getCreatedUser.wait();
+  //     setLoading(false);
+  //     window.location.reload();
+  //   } catch (error) {
+  //     setError(error);
+  //   }
+  // };
+
+  const createAccount = async ({ name }) => {
+    try {
       const contract = await connectingWithContract();
       console.log(contract);
       const getCreatedUser = await contract.createAccount(name);
 
-      setLoading(true);
-      await getCreatedUser.wait();
-      setLoading(false);
-      window.location.reload();
     } catch (error) {
-      setError("Error while creating your account Pleas reload browser");
+      console.log(error);
     }
-  };
+  }
 
   //ADD YOUR FRIENDS
   const addFriends = async ({ name, userAddress }) => {
@@ -133,6 +193,10 @@ export const ChatAppProvider = ({ children }) => {
         readUser,
         connectWallet,
         ChechIfWalletConnected,
+        FetchEmergencyData,
+        ShowEmergencyData,
+        EmergencyResponse,
+        emergency,
         account,
         userName,
         friendLists,
